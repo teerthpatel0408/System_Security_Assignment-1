@@ -1,0 +1,86 @@
+Code changes to be made nevertheless of testing:
+
+In case of invalid USERNAME, keep taking input and display "wrong username" till a matching username from masterfile not found. We've already handled the case of invalid login password.
+
+
+
+------- Login Scenarios-------
+
+> ram.yadav		//invalid uname, output "wrong username" and scan again till valid user from masterfile found. 
+> ramesh.yadav		//valid uname
+> 2px34sa19h.f		//invalid pwd(not matching with respective passwordfile of user), outputs "wrong password" and scans again upto 3 times before exiting application.
+> 2px34sa19h.fS		//valid pwd
+
+> ramesh.yadav		//valid uname
+> 2px34sa19h.fS		//valid pwd
+
+
+
+------- Change Password --------
+
+
+> ramesh.yadav		\\ fixed login credentials
+> 2px34sa19h.fS		// for all following test cases
+
+
+DOB for ramesh.yadav: 19-09-1985 (stored as 19091985)
+password file for ramesh.yadav (rypass.txt) : { 2px34sa19h.fS
+			           		lkA@!o90a$5p
+				   		m.M90a21gth*k
+				   		xCXtimPOT23!p
+				   		Abcd.1234.*S
+				   		9091@asdfOOP$ }
+
+
+//8sec backoff time after 1st attempt, 16sec after 2nd, 32sec after 3rd, and try again later(exit application) after 4th.
+
+
+> fN&%       		//invalid pwd as len<12 acc to R1 condition
+> jbdjckjk&12d		//invalid pwd as no uppercase char acc to R2 condition
+> LKKNCNLK*27D		//invalid pwd as no lowercase char acc to R3 condition
+> kjnscnjnNM%xz  	//invalid pwd as no digit acc to R4 condition
+> ncnklMNKL6676		//invalid pwd as no special charcters acc to R5 condition
+> ncn,<)[MNKL6676	//invalid pwd as none of the MENTIONED special charcters acc to R5 condition
+> lkA@!knjnknvj234 	//invalid pwd as 5 (>4) consecutive characters in pwd same as one of the last 10 passwords acc to R6 condition
+> lkA@!kl8xCXtim	//invalid pwd as for same as above (display for the first matching substring with len>4 and invalidate password, no need to match further)
+> rAmesHoinvn^23	//invalid pwd as name present in pwd acc to R7 condition
+> oibyADaV67&ert  	//invalid pwd as surname present in pwd acc to R7 condition
+> ramesH&65yadav89      //invalid pwd as name and surname present in pwd acc to R7 condition
+> inoap19091NJX&% 	//invalid pwd as 4 (>3) consecutive digits in pwd same as user DOB acc to R8 condition
+
+> lvlpoqHKM78%#uho89uhif         //invalid as exceeds maximum password length(20) but no check condition for it needed in code.
+
+> lvlpoqHKM78%# 		 //valid pwd, current pwd is updated to this one and pwd file updated to { lvlpoqHKM78%#
+													   2px34sa19h.fS
+			           									   lkA@!o90a$5p
+				   									   m.M90a21gth*k
+				   									   xCXtimPOT23!p
+				   									   Abcd.1234.*S
+				   									   9091@asdfOOP$ }
+
+
+
+------ Max size of pwd file ------
+
+
+Suppose the password file has 10 passwords : { lvlpoqHKM78%#
+					       2px34sa19h.fS
+			           	       lkA@!o90a$5p
+				   	       m.M90a21gth*k
+				   	       xCXtimPOT23!p
+				   	       Abcd.1234.*S
+				   	       9091@asdfOOP$ 
+					       ibjbadco*&HJ345
+					       ckmbomo*&092JX
+					       HJKLAMXObc&69 }
+
+And we add a new valid pwd : abmefoXOn*432
+
+Last password will be deleted (HJKLAMXObc&69) and new pwd will be added on top.
+
+Now if we try to change pwd to the deleted pwd(HJKLAMXObc&69) then it should work.
+
+
+
+
+
